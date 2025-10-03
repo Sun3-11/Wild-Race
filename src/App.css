@@ -1,0 +1,223 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  background: #0aa5c0;
+}
+
+.app {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  color: #797b7e;
+}
+.webgl {
+  position: fixed;
+  top: 0;
+  left: 0;
+  outline: none;
+}
+/* HUD */
+.hud {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  gap: 10px;
+}
+.hud .card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(6px);
+  padding: 8px 12px;
+  border-radius: 12px;
+}
+.hud .value {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/* Menu */
+.menu {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: radial-gradient(
+    60% 60% at 50% 40%,
+    rgba(94, 96, 231, 0.12),
+    transparent
+  );
+}
+.menu h1 {
+  font-size: 42px;
+  margin: 0 0 4px 0;
+}
+.menu .subtitle {
+  opacity: 0.8;
+  margin-bottom: 10px;
+}
+.menu .row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+}
+.menu .option {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 10px 14px;
+  border-radius: 12px;
+}
+.menu .option.active {
+  outline: 2px solid #818cf8;
+}
+
+/* GameOver */
+.gameover {
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(12, 17, 23, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 14px 16px;
+  border-radius: 14px;
+  text-align: center;
+}
+.gameover .row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+/* Button reset  */
+button {
+  all: unset;
+  line-height: 1;
+  text-align: center;
+}
+button:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+.menu {
+  text-align: center;
+  padding: 20px;
+  color: #fff;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px #000;
+}
+
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 30px 0;
+}
+
+.card {
+  width: 160px;
+  padding: 20px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #3e8ef7, #1c2a4a);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
+  border: 3px solid transparent;
+}
+
+.card:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.card.active {
+  border: 3px solid gold;
+  box-shadow: 0 0 20px gold;
+}
+
+.ball {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin: 0 auto 10px;
+  box-shadow: inset -4px -4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.ball.blue {
+  background: #42a5f5;
+}
+
+.ball.purple {
+  background: #ab47bc;
+}
+.card {
+  cursor: pointer;
+  text-align: center;
+  padding: 15px;
+  border-radius: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card.active {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.ball-img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+.countdown-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.countdown-text {
+  font-size: 6rem;
+  color: white;
+  font-weight: bold;
+  animation: pop 1s ease;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
