@@ -79,12 +79,13 @@ export default function Menu() {
 
   @media (orientation: landscape) {
     .menu {
-      max-height: 100dvh;           
+      max-height: 100%;           
       overflow-y: auto;            
       overflow-x: hidden;          
       -webkit-overflow-scrolling: touch; 
       overscroll-behavior: contain; 
-      padding-bottom: 2rem;
+      bottom: 2rem;
+      
     }
 
     .menu::-webkit-scrollbar {
