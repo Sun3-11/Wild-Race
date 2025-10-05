@@ -82,7 +82,7 @@ const PlayerBall = forwardRef(function PlayerBall(
   const checkObstacles = (pos, scene) => {
     const box = new THREE.Box3().setFromCenterAndSize(
       pos,
-      new THREE.Vector3(0.8, 0.8, 0.8)
+      new THREE.Vector3(0.0, 0.0, 0.0)
     );
     let collided = false;
     scene.traverse((obj) => {
@@ -146,12 +146,19 @@ const PlayerBall = forwardRef(function PlayerBall(
       new THREE.Vector3(p.x, p.y, p.z),
       state.scene
     );
+    //انهاء اللعبة عند الاصطدام
     if (collided && !isJumping.current) {
       finish("obstacle");
       return;
     } else {
       playerRef.current.position.copy(p);
     }
+    //او ارتداد للخلف عند الاصطدام
+    // if (collided && !isJumping.current) {
+    //   vel.z = -vel.z * 5; // ارتداد بسيط للخلف
+    // } else {
+    //   playerRef.current.position.copy(p);
+    // }
 
     // insects collection
     state.scene.traverse((o) => {

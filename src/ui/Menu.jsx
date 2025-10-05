@@ -63,13 +63,120 @@ export default function Menu() {
       </div>
 
       {/*   START RACE  */}
-      <div className="row">
+      {/* <div className="row">
         <Button onClick={startCountdown} disabled={!selection}>
           🚀 Start The Race
         </Button>
       </div>
 
+      <style>{` */}
+      {/*   START RACE  */}
+      <div className="row">
+        <button
+          onClick={startCountdown}
+          disabled={!selection}
+          className={`start-btn ${!selection ? "disabled" : ""}`}
+        >
+          <span className="text">🚀 Start The Race</span>
+          <span className="shine"></span>
+          <span className="pulse"></span>
+        </button>
+      </div>
+
       <style>{`
+  .start-btn {
+    position: relative;
+    padding: 1rem 2.5rem;
+    border: none;
+    border-radius: 2rem;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(90deg, #ff7b00, #ffb300, #ff7b00);
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.15s ease, box-shadow 0.3s ease;
+    text-transform: uppercase;
+    box-shadow: 0 0 25px rgba(255, 166, 0, 0.4);
+    animation: pulseGlow 2.5s infinite;
+  }
+
+  .start-btn:hover {
+    transform: scale(1.07);
+    box-shadow: 0 0 40px rgba(255, 180, 0, 0.8), 0 0 80px rgba(255, 100, 0, 0.5);
+  }
+
+  .start-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 20px rgba(255, 150, 0, 0.8);
+  }
+
+  // .start-btn.disabled {
+  //   background: #777;
+  //   cursor: not-allowed;
+  //   box-shadow: none;
+  //   animation: none;
+  // }
+
+  .start-btn .text {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* 💥 حركة لمعان تمر على الزر */
+  .start-btn .shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(255, 255, 255, 0.5),
+      transparent
+    );
+    transform: skewX(-20deg);
+    animation: shineAnim 2.5s infinite;
+  }
+
+  @keyframes shineAnim {
+    0% { left: -100%; }
+    50% { left: 120%; }
+    100% { left: 120%; }
+  }
+
+  /* ✨ نبض نيون خفيف */
+  .start-btn .pulse {
+    position: absolute;
+    inset: 0;
+    border-radius: 2rem;
+    box-shadow: 0 0 15px rgba(255, 150, 0, 0.7);
+    animation: pulseWave 2s infinite ease-in-out;
+    z-index: 1;
+  }
+
+  @keyframes pulseWave {
+    0% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(1.05); }
+    100% { opacity: 0.7; transform: scale(1); }
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% {
+      box-shadow: 0 0 25px rgba(255, 180, 0, 0.4), 0 0 40px rgba(255, 100, 0, 0.2);
+    }
+    50% {
+      box-shadow: 0 0 45px rgba(255, 220, 0, 0.8), 0 0 80px rgba(255, 150, 0, 0.5);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .start-btn {
+      padding: 0.8rem 2rem;
+      font-size: 1.1rem;
+    }
+  }
   .menu {
     text-align: center;
     padding: 1.5rem;

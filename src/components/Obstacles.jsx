@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -8,6 +8,7 @@ export default function Obstacles({
   length = 300,
   width = 10,
   seed = 99,
+  showCollisionBoxes = true,
 }) {
   const groupRocks = useRef();
   const groupBranches = useRef();
@@ -33,7 +34,7 @@ export default function Obstacles({
         amplitude: 1 + rng(i + 4) * 2,
         phase: rng(i + 5) * Math.PI * 2,
         rotX: rng(i + 6) * 0.01 + 0.005,
-        rotY: rng(i + 7) * 0.01 + 0.005,
+        rotY: rng(i + 4) * 0.01 + 0.005,
       };
     });
   }, [rockCount, length, width, seed]);
@@ -67,14 +68,18 @@ export default function Obstacles({
   // Animation loop
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
+
+    // Rocks Animation
     if (groupRocks.current) {
       groupRocks.current.children.forEach((mesh, i) => {
-        const { baseX, speed, amplitude, phase, rotX, rotY } = rocks[i];
+        const { baseX, speed, amplitude, phase, rotY, rotX } = rocks[i];
         mesh.position.x = baseX + Math.sin(t * speed + phase) * amplitude * 0.8;
+        mesh.rotation.x += rotY;
         mesh.rotation.x += rotX;
-        mesh.rotation.y += rotY;
       });
     }
+
+    // Branches Animation
     if (groupBranches.current) {
       groupBranches.current.children.forEach((mesh, i) => {
         const { baseX, baseY, speed, amplitude, phase, mode } = branches[i];
@@ -94,25 +99,61 @@ export default function Obstacles({
     }
   });
 
-  //  RockGeometry
+  // RockGeometry
   const createRockGeometry = (size) => {
-    const geometry = new THREE.IcosahedronGeometry(size, 2);
-    const positionAttr = geometry.attributes.position;
+    const geo = new THREE.DodecahedronGeometry(size, 1);
+    const pos = geo.attributes.position;
     const vertex = new THREE.Vector3();
 
-    for (let i = 0; i < positionAttr.count; i++) {
-      vertex.fromBufferAttribute(positionAttr, i);
-      const noise = (Math.sin(vertex.x * 3) + Math.cos(vertex.y * 3)) * 0.25;
+    for (let i = 0; i < pos.count; i++) {
+      vertex.fromBufferAttribute(pos, i);
+      const noise = (Math.sin(vertex.x * 2) + Math.cos(vertex.y * 2)) * 0.3;
       vertex.addScaledVector(vertex.clone().normalize(), noise);
-      positionAttr.setXYZ(i, vertex.x, vertex.y, vertex.z);
+      pos.setXYZ(i, vertex.x, vertex.y, vertex.z);
     }
 
-    geometry.computeVertexNormals();
-    return geometry;
+    geo.computeVertexNormals();
+    return geo;
   };
 
+  // wireframes
+  // const addCollisionBox = (mesh, color = 0xff0000) => {
+  //   const box = new THREE.Box3().setFromObject(mesh);
+  //   const size = new THREE.Vector3();
+  //   const center = new THREE.Vector3();
+  //   box.getSize(size);
+  //   box.getCenter(center);
+
+  //   const boxMesh = new THREE.Mesh(
+  //     new THREE.BoxGeometry(size.x, size.y, size.z),
+  //     new THREE.MeshBasicMaterial({
+  //       color,
+  //       wireframe: true,
+  //       transparent: true,
+  //       opacity: 0.4,
+  //     })
+  //   );
+
+  //   boxMesh.position.copy(center);
+  //   mesh.add(boxMesh);
+  // };
+
+  // //boxes
+  // useEffect(() => {
+  //   if (!showCollisionBoxes) return;
+
+  //   groupRocks.current?.children.forEach((rockGroup) => {
+  //     const mesh = rockGroup.children[0];
+  //     addCollisionBox(mesh, 0xff0000);
+  //   });
+
+  //   groupBranches.current?.children.forEach((branchGroup) => {
+  //     const mesh = branchGroup.children[0];
+  //     addCollisionBox(mesh, 0x00ff00);
+  //   });
+  // }, [showCollisionBoxes]);
   // Glow
-  const Glow = ({ scale = 1.4, color = "red", intensity = 0.3 }) => (
+  const GlowRock = ({ scale = 3.0, color = "red", intensity = 0.16 }) => (
     <mesh scale={scale}>
       <sphereGeometry args={[1, 16, 16]} />
       <meshBasicMaterial
@@ -124,10 +165,21 @@ export default function Obstacles({
       />
     </mesh>
   );
-
+  const GlowBranch = ({ scale = 1.5, color = "red", intensity = 0.3 }) => (
+    <mesh scale={scale}>
+      <boxGeometry args={[10, 1, 1]} />
+      <meshBasicMaterial
+        color={color}
+        transparent
+        opacity={intensity}
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+      />
+    </mesh>
+  );
   return (
     <group>
-      {/*  Rocks */}
+      {/* Rocks */}
       <group ref={groupRocks}>
         {rocks.map(({ id, pos, size }) => (
           <group
@@ -144,12 +196,12 @@ export default function Obstacles({
               />
             </mesh>
             {/*  Glow Rocks */}
-            {/* <Glow scale={1.8} color="red" intensity={0.2} /> */}
+            {/* <GlowRock scale={1.0} color="red" intensity={0.16} /> */}
           </group>
         ))}
       </group>
 
-      {/* Branches */}
+      {/*Branche */}
       <group ref={groupBranches}>
         {branches.map(({ id, pos, width, radius }) => (
           <group
@@ -164,9 +216,9 @@ export default function Obstacles({
                 roughness={0.8}
                 metalness={0.05}
               />
+              {/*  Glow Branch */}
+              {/* <GlowBranch scale={1.0} color="red" intensity={0.16} /> */}
             </mesh>
-            {/* 🔥 Glow Branches */}
-            {/* <Glow scal e={1.2} color="#1b5e20" intensity={0.15} /> */}
           </group>
         ))}
       </group>
