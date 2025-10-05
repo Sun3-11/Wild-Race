@@ -148,23 +148,6 @@ export default function GameOver() {
           </button>
         </div>
       )}
-
-      {/*  CSS Animation  */}
-      <style>
-        {`
-          .lose {
-            animation: shake 0.5s;
-          }
-
-          @keyframes shake {
-            0% { transform: translate(0,0); }
-            25% { transform: translate(-10px,0); }
-            50% { transform: translate(10px,0); }
-            75% { transform: translate(-10px,0); }
-            100% { transform: translate(0,0); }
-          }
-        `}
-      </style>
     </div>
   );
 }
