@@ -41,17 +41,19 @@ const PlayerBall = forwardRef(function PlayerBall(
   const playerRef = ref || localRef;
 
   const vel = useMemo(() => new THREE.Vector3(), []);
+
+  //   event.code
   const keys = useMemo(
     () => ({
       ArrowUp: false,
       ArrowDown: false,
       ArrowLeft: false,
       ArrowRight: false,
-      w: false,
-      s: false,
-      a: false,
-      d: false,
-      " ": false,
+      KeyW: false,
+      KeyS: false,
+      KeyA: false,
+      KeyD: false,
+      Space: false,
     }),
     []
   );
@@ -68,9 +70,10 @@ const PlayerBall = forwardRef(function PlayerBall(
   const pumbaa = useGLTF("/models/PumbaawithAnimation3.glb");
   const model = selection === "timon" ? timon : pumbaa;
 
+  // all key input
   useEffect(() => {
-    const down = (e) => (keys[e.key] = true);
-    const up = (e) => (keys[e.key] = false);
+    const down = (e) => (keys[e.code] = true);
+    const up = (e) => (keys[e.code] = false);
     window.addEventListener("keydown", down);
     window.addEventListener("keyup", up);
     return () => {
@@ -99,11 +102,11 @@ const PlayerBall = forwardRef(function PlayerBall(
     if (phase !== "playing") return;
 
     const forwardKey =
-      keys.ArrowUp || keys.w ? 1 : keys.ArrowDown || keys.s ? -1 : 0;
+      keys.ArrowUp || keys.KeyW ? 1 : keys.ArrowDown || keys.KeyS ? -1 : 0;
     const sideKey =
-      keys.ArrowLeft || keys.a ? -1 : keys.ArrowRight || keys.d ? 1 : 0;
+      keys.ArrowLeft || keys.KeyA ? -1 : keys.ArrowRight || keys.KeyD ? 1 : 0;
 
-    //  Mobile Input
+    //  mobile Input
     const forward = forwardKey || mobileInput.forward;
     const side = sideKey || mobileInput.side;
 
@@ -124,8 +127,8 @@ const PlayerBall = forwardRef(function PlayerBall(
     p.x = THREE.MathUtils.clamp(p.x, -half, half);
     p.z = Math.max(p.z, minZ);
 
-    // jump
-    if ((keys[" "] || mobileInput.jump) && !isJumping.current) {
+    //  jump
+    if ((keys.Space || mobileInput.jump) && !isJumping.current) {
       jumpVel.current = jumpStrength;
       isJumping.current = true;
       resetJump();
@@ -146,6 +149,7 @@ const PlayerBall = forwardRef(function PlayerBall(
       new THREE.Vector3(p.x, p.y, p.z),
       state.scene
     );
+
     //انهاء اللعبة عند الاصطدام
     if (collided && !isJumping.current) {
       finish("obstacle");
