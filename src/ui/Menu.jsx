@@ -63,19 +63,22 @@ export default function Menu() {
       </div>
 
       {/*   START RACE  */}
-      {/* <div className="row">
-        <Button onClick={startCountdown} disabled={!selection}>
-          🚀 Start The Race
-        </Button>
-      </div>
-
-      <style>{` */}
-      {/*   START RACE  */}
       <div className="row">
-        <button
+        {/* <button
           onClick={startCountdown}
           disabled={!selection}
           className={`start-btn ${!selection ? "disabled" : ""}`}
+        >
+          <span className="text">🚀 Start The Race</span>
+          <span className="shine"></span>
+          <span className="pulse"></span>
+        </button> */}
+        <button
+          onClick={() => {
+            if (!selection) setSelection("pumbaa");
+            startCountdown();
+          }}
+          className="start-btn"
         >
           <span className="text">🚀 Start The Race</span>
           <span className="shine"></span>
